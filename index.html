@@ -1,0 +1,365 @@
+<!doctype HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Sketchio Practice</title>
+	<meta name="description" content="">
+	<meta name="keywords" content="">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">	
+	<!-- CSS -->
+	<link href='http://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet' type='text/css'>
+	<link type="text/css" rel="stylesheet" href="css/reset.css">
+	<link type="text/css" rel="stylesheet" href="css/style.min.css">
+</head>
+<body>
+	<input type="hidden" id="input-save-forecolor" value="#000000"/>
+	<input type="hidden" id="input-save-backcolor" value="#FFFFFF"/>
+	<input type="hidden" id="input-save-tool" value="0"/>
+	<input type="hidden" id="input-save-number" value="10"/>
+	<input type="hidden" id="input-save-duration" value="30"/>
+	<input type="hidden" id="input-save-left-handed" value="false"/>
+	<input type="hidden" id="input-save-own-app" value="false"/>
+	<input type="hidden" id="input-save-cat" value="catId-0"/>
+	<article id="presentation" class="frame opaque">
+		<section class="modal small">
+			<div class="modal-body">
+				<h1>Sketchio<br>
+				Practice</h1>
+				<p>Version 1.0.<br>
+				With the use of <a href="http://www.deviantart.com" target="_blank">DeviantART</a> search.</p>
+				<p>Copyright 2014 - Pablo Cazorla.</p>
+			</div>
+			<img src="img/presentation.png" id="presentation-img"/>
+		</section>
+	</article>	
+	<div class="dimmer meta" id="dimmer"></div>
+	<section class="modal small meta" id="stop-modal" autosize="250">
+		<span class="help-corner" title="Help" rel="5">?</span>
+		<div class="modal-body align-center">
+			<p>The practice will stop to show sketch results.<br>
+			Are you sure?
+			<p class="no-margin"><span class="btn secondary" id="continue-practice">No, continue practice</span><span class="btn" id="stop-practice">Yes, stop practice</span></p>
+		</div>
+	</section>
+	<section class="modal small meta" id="post-results-modal" autosize="250">
+		<div class="modal-body align-center">
+			<p>Do you want to start a new sketch practice?</p>
+			<p class="align-center no-margin"><span class="btn secondary" id="cancel-post-result">No</span><span class="btn" id="ok-post-result">Yes</span></p>
+		</div>
+	</section>
+	<section class="modal fixsize meta" id="results-modal">
+		<span class="help-corner" title="Help" rel="5">?</span>
+		<div class="modal-body">
+			<p class="no-margin">Sketch results</p>
+			<p class="reference no-margin">Click on thumbnails to enlarge and save.</p>
+			<div class="result-list-frame">
+				<div id="result-list" class="clearfix"></div>
+			</div>
+			<p class="align-center no-margin for-btn"><span class="btn" id="close-result-container">Ok</span></p>
+		</div>
+		<div id="result-image-container">
+			<div class="modal-body">
+				<img src="" title="Right click to save" id="result-image"/>
+			</div>
+			<p class="align-center no-margin for-btn">
+				<span class="reference">Over the image, press Right Button of the Mouse an select "Save image".</span>
+				<span class="btn secondary" id="close-result-image-container">Close image</span>
+			</p>
+		</div>
+	</section>
+	<section class="modal meta" id="welcome-modal" autosize="340">
+		<div class="modal-body align-center">
+			<div class="welcome-text">
+				<p>Welcome to <b>Sketchio Practice</b>.</p>
+				<p class="sml">This application is designed in order that you can practice your quick-sketching skills on particular topics with limited time. Also, of course, if the practice provide some interesting sketches, you can save them as png image.</p>
+			</div>
+			<p class="no-margin"><span class="btn" id="welcome-start">Start new practice</span></p>
+		</div>
+	</section>
+	<section class="modal small meta" id="post-configure-new-practice-modal" autosize="240">
+		<div class="modal-body align-center">
+			<p class="for-post-configure-new-practice-clock"><canvas id="post-configure-new-practice-clock" width="30" height="30"></canvas> Loading model photos...</p>		
+			<p class="reference no-margin align-center">
+				Use SPACEBAR to pause/play the practice.<br>
+				Use RIGHT ARROW to next sketch.
+			</p>
+		</div>
+		<div class="modal-body align-center" id="try-again-body">
+			<p>Sorry, I couldn't load model photos. Please, try again.</p>
+			<p class="no-margin"><span class="btn" id="try-again-load">Ok</span></p>
+		</div>
+	</section>
+	<section class="modal meta" id="configure-new-practice-modal" autosize="680">
+		<span class="help-corner" title="Help" rel="2">?</span>
+		<div class="modal-body">
+			<h2>New sketch practice</h2>				
+			<p class="border-top-categories">I want to draw <span class="dropdown" id="input-num-model">20 sketches</span> in <span class="dropdown" id="input-num-time">30 seconds</span> each, with themes related to:</p>					
+			<div id="categories-container">
+				<div id="categories">
+<p class="reference no-margin align-center">Choose from categories</p>
+				</div>
+			</div>
+			<p class="align-center border-bottom-categories"><span class="btn secondary" id="cancel-practice">Cancel</span><span class="btn" id="start-practice">Start</span></p>
+		</div>
+	</section>
+
+	<section class="modal meta" id="preferences-modal" autosize="400">
+		<span class="help-corner" title="Help" rel="6">?</span>
+		<div class="modal-body">
+			<h2>Preferences</h2>				
+			<p><span class="checkbox" id="ch-use-left"></span>Layout for left handed.</p>
+			<p><span class="checkbox" id="ch-use-own"></span>Use your own application painting.</p>			
+		</div>
+		<p class="align-center bottom-preferences"><span class="btn" id="ok-preferences">Ok</span></p>
+	</section>
+	<section class="modal meta fixsize" id="help-modal">
+		<menu class="help-menu">
+			<ul>
+				<li class="current">Introduction</li>
+				<li>Layout</li>
+				<li>Start new practice</li>
+				<li>Sketching</li>
+				<li>Hotkeys</li>
+				<li>Results of practice</li>
+				<li>Preferences</li>
+				<li>About</li>
+			</ul>
+		</menu>
+		<div class="modal-body">
+			<div class="help-section current">
+				<h2>Introduction</h2>				
+				<div class="welcome-text-content"></div>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help next">Layout</a>
+				</p>
+			</div>
+			<div class="help-section current">
+				<h2>Layout</h2>				
+				<p>The application screen is mainly divided in two areas: <b>Image Model</b> and <b>Paint Area</b>.</p>
+				<p><img src="img/layout.jpg" class="img-layout"/></p>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help prev">Introduction</a>
+					<a href="" class="link-help next">Start new practice</a>
+				</p>
+			</div>
+			<div class="help-section">
+				<h2>Start new practice</h2>				
+				<p>Got to <b>Menu</b> > <b>New</b>.</p>
+				<p>In the pop-up panel, select the number of sketches you want to make , and the time for each. Also select the category of models to use as reference.</p>
+				<p>Then click on <b>Start</b>.</p>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help prev">Layout</a>
+					<a href="" class="link-help next">Sketching</a>
+				</p>
+			</div>
+			<div class="help-section">
+				<h2>Sketching</h2>				
+				<p>Start drawing the sketches on the <b>Paint Area</b>.</p>
+				<p>You can use different tools (Pencil, Eraser, Oil, Watercolor, Airbrush, Blender, Color Picker). Also, you can select the colors front/background you want.</p>
+				<p>If you need to <b>Pause</b>, skip to <b>Next model</b> or <b>Stop</b> the practice, you can use the <b>Player Buttons</b> at the top of the window.</p>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help prev">Start new practice</a>
+					<a href="" class="link-help next">Hotkeys</a>
+				</p>
+			</div>
+			<div class="help-section">
+				<h2>Hotkeys</h2>
+				<div class="clearfix">			
+					<div class="hk-col">
+						<table>
+							<thead>
+								<tr>
+									<th>Tool</th><th>Key</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Pencil</td><td>P</td>
+								</tr>
+								<tr>
+									<td>Eraser</td><td>E</td>
+								</tr>
+								<tr>
+									<td>Oil</td><td>O</td>
+								</tr>
+								<tr>
+									<td>Watercolor</td><td>W</td>
+								</tr>
+								<tr>
+									<td>Airbrush</td><td>A</td>
+								</tr>
+								<tr>
+									<td>Blender</td><td>B</td>
+								</tr>
+								<tr>
+									<td>Color Picker</td><td>I, Alt down</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="hk-col">
+						<table>
+							<thead>
+								<tr>
+									<th>Command</th><th>Key</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Play/Pause</td><td>SPACEBAR</td>
+								</tr>
+								<tr>
+									<td>Next Image</td><td>RIGHT ARROW</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help prev">Sketching</a>
+					<a href="" class="link-help next">Results of practice</a>
+				</p>
+			</div>
+			<div class="help-section">
+				<h2>Results of practice</h2>				
+				<p>When practice ends, a <b>Sketch results</b> panel appears. By clicking on any thumbnail you prefer, you can zoom the sketch and then save as <b>PNG image</b>.</p>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help prev">Hotkeys</a>
+					<a href="" class="link-help next">Preferences</a>
+				</p>
+			</div>	
+			<div class="help-section">
+				<h2>Preferences</h2>
+				<p>The <b>Preferences</b> panel allows you to configure the following options:</p>
+				<h3>Left Handed</h3>
+				<p>If you are left handed, you can reverse the layout of the most comfortable way for you.</p>
+				<h3>Your own application</h3>
+				<p>You can also use your favorite drawing application (<i>MyPaint</i>, <i>Krita</i>, <i>Photoshop</i>, <i>Painter</i>, etc..). It will display <b>Image Model</b> only, without <b>Paint Area</b>.</p>
+				<p class="clearfix for-link-help">
+					<a href="" class="link-help prev">Results of practice</a>
+					<a href="" class="link-help next">About</a>
+				</p>	
+			</div>
+			<div class="help-section">
+				<h2>About</h2>
+				<div class="clearfix">
+					<div class="about-col col-left">
+						<img src="img/about.jpg"/>
+					</div>
+					<div class="about-col col-right">						
+						<p>Thanks for your interest in Sketchio Practice.</p>
+
+						<p>My name is Pablo Cazorla.<br>
+						I'm digital artist, fantasy illustrator, concept artist and designer. I love fantasy illustration, games, movies,  interactive web apps,  3D animation and everything about the world of the image. </p>
+
+						<h4>About Sketchio...</h4>
+
+						<p>This project was born from the need to improve my own sketching practice. But, after a lot of work, I thought it was good idea to share it with the community of artists. If you have suggestions for improvement, questions or idea, please write a comment in <a href="http://www.pcazorla.com/2014/04/30/sketchio-practice/#comments" target="_blank">this post</a>.</p>
+
+						<p>Also, if you liked the app and find it useful, help me to continue developing it with a donation:</p>
+						<div class="align-center donate">
+							<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+								<input type="hidden" name="cmd" value="_s-xclick">
+								<input type="hidden" name="hosted_button_id" value="6PKU87E3VCQKA">
+								<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+								<img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1">
+							</form>
+						</div>			
+					</div>
+				</div>
+				<p class="about-info">Sketchio Practice - Version 1.0. With the use of <a href="http://www.deviantart.com" target="_blank">DeviantART</a> search. Copyright 2014 - Pablo Cazorla.</p>
+			</div>		
+		</div>
+		<p class="align-center bottom-help"><span class="btn" id="ok-help">Ok</span></p>
+	</section>
+	
+	<article id="application" class="frame">
+		<section class="app-section" id="photo-section">
+			<div class="tools">
+				<canvas id="clock-canvas" width="34" height="34"></canvas>				
+				<canvas id="player-canvas" width="102" height="34"></canvas>
+				<span class="title" id="title-player-canvas"></span>							
+			</div>		
+			<figure class="photo-container">
+				<figcaption class="photo-info"></figcaption>
+				<img src="" class="photo-image"/>				
+			</figure>
+			<figure class="photo-container">
+				<figcaption class="photo-info"></figcaption>
+				<img src="" class="photo-image"/>				
+			</figure>
+		</section>
+		<section class="app-section" id="paint-section">
+			<menu id="main-menu">
+				<div id="main-menu-trigger">
+					<span class="line"></span>
+					<span class="line"></span>
+					<span class="line"></span>
+				</div>
+				<ul>					
+					<li id="menu-new">New</li>
+					<span class="triangle"><span></span></span>
+					<li id="menu-preferences">Preferences</li>
+					<li id="menu-help">Help</li>
+					<li id="menu-about">About</li>
+				</ul>
+				<div id="share-tool">
+					<!-- AddThis Button BEGIN -->
+					<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+					<a class="addthis_button_facebook"><span class="icon-share icon-share-facebook"></span></a>
+					<a class="addthis_button_twitter"><span class="icon-share icon-share-twitter"></span></a>
+					<a class="addthis_button_google_plusone_share"><span class="icon-share icon-share-google"></span></a>
+					</div>			
+					<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4d9270a3495656e9"></script>
+					<!-- AddThis Button END -->
+				</div>
+			</menu>
+			<div class="tools">
+				<div class="tool tool-icon brush pencil"><span class="title">Pencil (P)</span></div>
+				<div class="tool tool-icon brush eraser"><span class="title">Eraser (E)</span></div>
+				<div class="tool tool-icon brush oil"><span class="title">Oil (O)</span></div>
+				<div class="tool tool-icon brush watercolor"><span class="title">Watercolor (W)</span></div>
+				<div class="tool tool-icon brush airbrush"><span class="title">Airbrush (A)</span></div>
+				<div class="tool tool-icon brush blender"><span class="title">Blender (L)</span></div>
+				<div class="tool tool-icon picker"><span class="title">Color Picker (I,Alt)</span></div>
+				<div class="tool" id="tool-color">
+					<span id="background-color-sample" class="color-sample"></span>
+					<span id="foreground-color-sample" class="color-sample"></span>
+					<div id="color-ctrl" class="color-ctrl">
+						<div class="triangle"><div></div></div>
+						<div class="color-cnv-container">
+							<canvas id="color-cnv-gradient-sat-val" width="140" height="140"></canvas>
+							<canvas id="color-cnv-gradient-hue" width="20" height="140"></canvas>
+							<span id="color-sat-val-cursor"></span>
+							<span id="color-hue-cursor"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="next-sketch">...start new sketch</div>
+			<div id="picker-sample"></div>
+			<canvas id="draw-canvas" class="to-draw" width="500" height="500"></canvas>
+			<canvas id="blending-canvas" class="to-draw hidden" width="500" height="500"></canvas>
+			<canvas id="picker-canvas" class="to-draw hidden" width="500" height="500"></canvas>
+		</section>
+	</article>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>	
+	<script src="js/app.min.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-29202475-1']);
+		_gaq.push(['_setDomainName', 'pcazorla.com']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</body>
+</html>
+
+
